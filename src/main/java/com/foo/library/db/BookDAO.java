@@ -30,7 +30,7 @@ public class BookDAO {
 			book.getId(),
 			book.getTitle(),
 			book.getGenre(),
-			book.getTitle()
+			book.getAuthor()
 		);
 	}
 }

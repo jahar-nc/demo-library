@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor(staticName="of")
-public class Book {
+public class Book implements Cloneable {
 	public long id;
 
 	public String title;
@@ -24,7 +24,17 @@ public class Book {
 			book.getId(),
 			book.getTitle(),
 			book.getGenre(),
-			book.getTitle()
+			book.getAuthor()
 		);
+	}
+
+	@Override
+	public Book clone() {
+		try {
+			Book clone = (Book) super.clone();
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError();
+		}
 	}
 }

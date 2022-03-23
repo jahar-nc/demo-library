@@ -2,6 +2,7 @@ package com.foo.library.controller;
 
 import com.foo.library.model.Book;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -37,14 +38,14 @@ public class HelloControllerITest {
 		assertThat(addedID).isNotNull();
 		assertThat(addedID).isNotEqualTo(-1);
 
-		Book expected = Book.of(addedID, toAdd.getTitle(), toAdd.getGenre(), toAdd.getAuthor());
+		Book expected = toAdd.clone();
+		expected.setId(addedID);
+
 		ResponseEntity<Book[]> allBooksResponse = template.getForEntity(
 			"/list", Book[].class
 		);
 		Book[] allBooks = allBooksResponse.getBody();
 		assertThat(allBooks).isNotNull();
-		List<Book> bookList = asList(allBooks);
-		assert bookList.contains(expected);
-		assertThat(bookList).contains(expected);
+		assertThat(allBooks).contains(expected);
 	}
 }
