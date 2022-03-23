@@ -2,13 +2,9 @@ package com.foo.library.controller;
 
 import com.foo.library.db.BookDAO;
 import com.foo.library.model.Book;
-import com.foo.library.repository.BookRepository;
 import com.foo.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -39,9 +35,9 @@ public class HelloController {
 		return books.map(Book::from).toArray(Book[]::new);
 	}
 
-	@PutMapping("/add")
+	@PostMapping("/add")
 	public long add(
-		@RequestParam(name = "book") Book book
+		@RequestBody Book book
 	) {
 		return bookService.add(BookDAO.from(book));
 	}

@@ -2,10 +2,12 @@ package com.foo.library.model;
 
 import com.foo.library.db.BookDAO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Data
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor(staticName="of")
 public class Book {
