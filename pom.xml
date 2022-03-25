@@ -16,8 +16,30 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+    <spring.boot-version>2.6.3</spring.boot-version>
     <camel.version>3.14.2</camel.version>
 	</properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Spring Boot BOM -->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring.boot-version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- Camel BOM -->
+      <dependency>
+        <groupId>org.apache.camel.springboot</groupId>
+        <artifactId>camel-spring-boot-dependencies</artifactId>
+        <version>${camel.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
 	<dependencies>
 		<dependency>
@@ -45,27 +67,30 @@
       <version>2.1.210</version>
     </dependency>
 
-    <!-- camel stuff -->
+    <!-- Camel -->
     <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-core</artifactId>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-spring-boot-starter</artifactId>
       <version>${camel.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.camel/camel-test -->
     <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-test</artifactId>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-stream-starter</artifactId>
       <version>${camel.version}</version>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.camel/camel-test-spring -->
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-test-spring-junit5</artifactId>
-      <version>${camel.version}</version>
       <scope>test</scope>
+      <version>${camel.version}</version>
     </dependency>
-
 
     <!-- tag::actuator[] -->
 		<dependency>
@@ -74,13 +99,6 @@
 		</dependency>
 		<!-- end::actuator[] -->
 
-		<!-- tag::tests[] -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- end::tests[] -->
 	</dependencies>
 
 	<build>
