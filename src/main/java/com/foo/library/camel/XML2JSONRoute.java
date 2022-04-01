@@ -1,5 +1,6 @@
 package com.foo.library.camel;
 
+import com.foo.library.model.Books;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
@@ -9,26 +10,31 @@ public class XML2JSONRoute extends RouteBuilder {
 
 	@Override
 	public void configure() throws Exception {
-		from("timer:hello?period={{timer.period}}").routeId("hello")
-			.transform().method("myBean", "saySomething")
-			.filter(simple("${body} contains 'foo'"))
-			.to("log:foo")
-			.end()
-			.to("stream:out");
+		restConfiguration()
+			.contextPath("/camel")
+			.port(8080)
+			.component("servlet")
+			;
 
-//		from("direct:marshalBookxml2json")
-//			.to("log:?level=INFO&showBody=true")
-//			.marshal().xmljson()
-//			.to("log:?level=INFO&showBody=true");
-//
-//
-//		final XmlJsonDataFormat xmlJsonFormat = new XmlJsonDataFormat();
-//		xmlJsonFormat.setRootName("Book");
-//
-//		from("direct:unMarshalBookjson2xml")
-//			//.unmarshal().xmljson()
-//			.unmarshal(xmlJsonFormat)
-//			.to("log:?level=INFO&showBody=true");
+		rest("/xml")
+			.get("list")
+			.to("direct:camel-xml-list")
+			.produces("application/xml")
+			;
 
+		rest("/xml")
+			.post("add").consumes("application/xml")
+			.to("direct:camel-xml-add")
+			.produces("application/xml");
+
+		from("direct:camel-xml-add")
+			.bean("helloController", "add")
+			.bean("helloController", "get")
+			;
+
+		from("direct:camel-xml-list")
+			.bean("helloController", "list(${header.author}, ${header.genre})")
+			.convertBodyTo(Books.class)
+			;
 	}
 }

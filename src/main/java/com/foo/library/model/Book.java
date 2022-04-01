@@ -1,23 +1,26 @@
 package com.foo.library.model;
 
 import com.foo.library.db.BookDAO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor(staticName="of")
+@XmlRootElement(name = "book", namespace = "")
 public class Book implements Cloneable {
-	public long id;
+	private long id;
 
-	public String title;
+	private String title;
 
-	public String genre;
+	private String genre;
 
-	public String author;
+	private String author;
 
 	public static Book from(BookDAO book) {
 		return new Book(
