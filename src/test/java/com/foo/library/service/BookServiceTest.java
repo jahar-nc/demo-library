@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
-
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class BookServiceTest {
@@ -24,9 +24,7 @@ public class BookServiceTest {
 	public void canAdd() throws Exception {
 		BookDAO book = BookDAO.of(-1, "t", "g", "a");
 		long id = bookService.add(book);
-		Matchers.equalTo(1).matches(id);
-		Matchers.equalTo(
-			Arrays.asList(book)
-		).matches(bookService.list());
+		assertThat(1).isEqualTo(id);
+		assertThat(singletonList(BookDAO.of(1, "t", "g", "a"))).isEqualTo(bookService.list());
 	}
 }

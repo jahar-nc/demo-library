@@ -1,22 +1,17 @@
 package com.foo.library.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.camel.model.dataformat.JacksonXMLDataFormat;
-import org.apache.camel.model.dataformat.JaxbDataFormat;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BookTest {
@@ -37,7 +32,7 @@ public class BookTest {
 	}
 
 	@Test
-	public void parseJSON() throws Exception {
+	public void parseJson() throws Exception {
 		String document = "{'id': 1, 'genre': 'genre', 'author': 'author', 'title': 'title'}"
 			.replace('\'', '"');
 
@@ -46,23 +41,33 @@ public class BookTest {
 	}
 
 	@Test
-	public void parseXML() throws Exception {
+	public void parseXml() throws Exception {
 		String document = "<book><id>1</id><genre>genre</genre><author>author</author><title>title</title></book>";
-		InputStream inputStream = new ByteArrayInputStream(document.getBytes(StandardCharsets.UTF_8));
 
 		JAXBContext context = JAXBContext.newInstance(Book.class);
-		Object book = context.createUnmarshaller().unmarshal(inputStream);
+		Object book = context.createUnmarshaller().unmarshal(new StringReader(document));
 		assertThat(book).isEqualTo(Book.of(1, "title", "genre", "author"));
 	}
 
 	@Test
-	public void parseXML2() throws Exception {
-		String document = "<book><id>1</id><genre>genre</genre><author>author</author><title>title</title></book>";
-		JacksonXMLDataFormat dataFormat = new JacksonXMLDataFormat();
+	public void serialiseJson() throws Exception {
+		Book book = Book.of(1, "a", "b", "c");
+		String actual = new ObjectMapper().writer().writeValueAsString(book);
+		assertThat(actual).isEqualTo(
+			"{'id': 1, 'title': 'a', 'genre': 'b', 'author': 'c'}"
+				.replace('\'', '"').replace(" ", "")
+		);
+	}
 
-		dataFormat.setUnmarshalType(Book.class);
-//		dataFormat.getDataFormat().marshal();
-
-
+	@Test
+	public void serialiseXml() throws Exception {
+		Book book = Book.of(1, "a", "b", "c");
+		JAXBContext context = JAXBContext.newInstance(Book.class);
+		StringWriter out = new StringWriter();
+		context.createMarshaller().marshal(book, out);
+		assertThat(out.toString()).isEqualTo(
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+			+ "<book><author>c</author><genre>b</genre><id>1</id><title>a</title></book>"
+		);
 	}
 }
