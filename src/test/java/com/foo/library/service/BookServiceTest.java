@@ -1,6 +1,6 @@
 package com.foo.library.service;
 
-import com.foo.library.db.BookDAO;
+import com.foo.library.model.Book;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ public class BookServiceTest {
 
 	@Test
 	public void canAdd() throws Exception {
-		BookDAO book = BookDAO.of(-1, "t", "g", "a");
+		Book book = Book.of(-1, "t", "g", "a");
 		long id = bookService.add(book);
 		assertThat(1).isEqualTo(id);
-		assertThat(singletonList(BookDAO.of(1, "t", "g", "a"))).isEqualTo(bookService.list());
+		assertThat(singletonList(Book.of(1, "t", "g", "a"))).isEqualTo(bookService.list());
 	}
 }

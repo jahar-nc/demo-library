@@ -105,7 +105,12 @@
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
-      <artifactId>camel-rabbitmq</artifactId>
+      <artifactId>camel-spring-rabbitmq</artifactId>
+      <version>${camel.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-jacksonxml-starter</artifactId>
       <version>${camel.version}</version>
     </dependency>
 
