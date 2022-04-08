@@ -2,22 +2,15 @@ package com.foo.library.camel;
 
 import com.foo.library.model.Book;
 import com.foo.library.model.Books;
-import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jackson.JacksonDataFormat;
-import org.apache.camel.component.jackson.ListJacksonDataFormat;
 import org.apache.camel.model.dataformat.JacksonXMLDataFormat;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-
 
 @Component
-public class XML2JSONRoute extends RouteBuilder {
+public class Routes extends RouteBuilder {
 
 	JacksonDataFormat bookDataFormat = new JacksonDataFormat() {{
 		setUnmarshalType(Book.class);
