@@ -4,13 +4,16 @@ services:
     build: .
     ports:
       - "8080:8080"
-#  rmq:
-#    image: "rabbitmq:3.9-alpine"
+  rmq:
+    image: "rabbitmq:3.9-alpine"
+    ports:
+      - "6001:5672"
+
   db:
     build:
       context: docker/db
     ports:
-      # not needed to make the app work, just allows direct connection to the db from the host
-      - 6000:5432
+      # not needed to make the app work, just allows direct connection to the db from the hos
+      - "6000:5432"
     environment:
       - "POSTGRES_PASSWORD=foo"
